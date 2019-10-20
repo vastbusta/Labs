@@ -11,6 +11,7 @@ Purpose of program: AVL tree file for lab 3
 """
 
 class Node:
+    
     # AVL Node constructor
     def __init__(self, key):
         self.key = key
@@ -21,77 +22,103 @@ class Node:
 
     
     def get_balance(self):
-        # Find current height of left subtree, or -1 if None
-        left_height = -1
+        
+        
+        left_height = -1 # Find current height of left subtree, or -1 if None
+        
         if self.left is not None:
+            
             left_height = self.left.height
 
-        # Find right subtree's current height, or -1 if None
-        right_height = -1
+        
+        right_height = -1 # Find right subtree's current height, or -1 if None
+        
         if self.right is not None:
+            
             right_height = self.right.height
 
 
         return left_height - right_height
 
-    # Updates the height if needed
-    def update_height(self):
-        # Find current height of left subtree, or -1 if None
-        left_height = -1
+    
+    def update_height(self): # Updates the height if needed
+        
+        
+        left_height = -1 # Find current height of left subtree, or -1 if None
+        
         if self.left is not None:
+            
             left_height = self.left.height
 
-        # Find current height of right subtree, or -1 if None
-        right_height = -1
+        
+        right_height = -1 # Find current height of right subtree, or -1 if None
+        
         if self.right is not None:
+            
             right_height = self.right.height
 
-        # Assign self.height with calculated node height.
-        self.height = max(left_height, right_height) + 1
+        
+        self.height = max(left_height, right_height) + 1 # Assigns the current height
         
         
     def set_child(self, which_child, child):
-        # check which_child is properly assigned.
-        if which_child != "left" and which_child != "right":
+        
+        
+        if which_child != "left" and which_child != "right": # check which_child is properly assigned.
+            
             return False
 
-        # Assign the left or righ child.
-        if which_child == "left":
+        
+        if which_child == "left": # Assign the left or righ child.
+            
             self.left = child
         else:
             self.right = child
 
-        # if child is not None, Assign the new child's parent
-        if child is not None:
+        
+        if child is not None:# if child is not None, Assign the new child's parent
+            
             child.parent = self
 
-        # Update the node's height, if needed
-        self.update_height()
+        
+        self.update_height() # Update the node's height, if needed
+        
         return True
 
-    # Replace a current child with a new child. 
-    def replace_child(self, current_child, new_child):
+    
+    def replace_child(self, current_child, new_child):  # Replace a current child with a new child.
+        
         if self.left is current_child:
+            
             return self.set_child("left", new_child)
+        
         elif self.right is current_child:
+            
             return self.set_child("right", new_child)
 
         return False
 
 
-class AVLTree:
+class AVL_Tree:
+    
     def __init__(self):
-        #AVL Tree constructor
-        self.root = None
+        
+        
+        self.root = None #AVL Tree constructor
 
-    # Performs a left rotation 
-    def rotate_left(self, node):
-        #the node's right, left child
-        right_left_child = node.right.left
+    
+    def rotate_left(self, node):# Performs a left rotation 
+        
+        
+        right_left_child = node.right.left #the node's right, left child
 
         if node.parent is not None:
+            
             node.parent.replace_child(node, node.right)
-        else:  # node is root
+        
+        # node is root
+        else:  
+            
             self.root = node.right
             self.root.parent = None
 
@@ -101,15 +128,20 @@ class AVLTree:
 
         return node.parent
 
-    # Performs a right rotation at the given node
-    def rotate_right(self, node):
-        #The node's left, right child
-        left_right_child = node.left.right
+    
+    def rotate_right(self, node): # Performs a right rotation at the given node
+        
+        
+        left_right_child = node.left.right #The node's left, right child
 
         
         if node.parent is not None:
+            
             node.parent.replace_child(node, node.left)
-        else:  # node is root
+            
+        # node is root    
+        else: 
+            
             self.root = node.left
             self.root.parent = None
 
@@ -120,8 +152,8 @@ class AVLTree:
 
         return node.parent
 
-    # Updates the node's height and rebalances the tree
-    def rebalance(self, node):
+    
+    def rebalance(self, node): # Updates the node's height and rebalances the tree
 
         node.update_height()
 
@@ -130,29 +162,33 @@ class AVLTree:
 
         
             if node.right.get_balance() == 1:
-                # Double rotation case.
-                self.rotate_right(node.right)
+                
+               
+                self.rotate_right(node.right)  # Double rotation case.
 
-            # A left rotation will now make the subtree balanced.
-            return self.rotate_left(node)
+           
+            return self.rotate_left(node)  # A left rotation.
 
         elif node.get_balance() == 2:
 
             if node.left.get_balance() == -1:
-                # Double rotation case. 
-                self.rotate_left(node.left)
+                
+                
+                self.rotate_left(node.left)# Double rotation case. 
 
-            # A right rotation will now make the subtree balanced.
-            return self.rotate_right(node)
+            
+            return self.rotate_right(node) # A right rotation
 
-        # No imbalance, so just return the original node.
+        # if no balance is needed retrnneded 
         return node
 
-    # Insert a new node into the Tree
-    def insert(self, node):
+   
+    def insert(self, node):  # Insert a new node into the Tree
 
-        #if the tree is empty set the root to the new node
-        if self.root is None:
+        
+        
+        if self.root is None: #if the tree is empty set the root to the new node
+            
             self.root = node
             node.parent = None
 
@@ -187,8 +223,11 @@ class AVLTree:
 
     # Searches for a key in the tree
     def search(self, key):
+        
         current_node = self.root
+        
         while current_node is not None:
+            
             # Compare the current node's key to key that we are looking for
             if current_node.key == key:
                 return True
@@ -209,11 +248,11 @@ class AVLTree:
 
     # Removes the given node from the tree. 
     def remove_node(self, node):
-        # Base case:
-        if node is None:
+        
+        if node is None:# Base case:
+            
             return False
-
-        # Parent needed for rebalancing.
+        
         parent = node.parent
 
      

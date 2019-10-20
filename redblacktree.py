@@ -6,72 +6,101 @@ Instructor: Diego Aguirre
 TA:Gerarado Barraza
 Course: CS 2302
 Assigment: Lab 3B
-Date of last modification: 10/14/2019
+Date of last modification: 10/19/2019
 Purpose of program: Redblack file for lab3
 """
-class RBTNode:
+class RBT_Node:
     def __init__(self, key, parent,color, left, right):
+        
         self.key = key
         self.left = left
         self.right = right
         self.parent = parent
         self.color = color
         
-    # Returns true if both child nodes are black
-    def are_both_children_black(self):
+ 
+    def are_both_children_black(self): # Returns true if both child nodes are black
+        
         if self.left != None and self.left.is_red():
+            
             return False
+        
         if self.right != None and self.right.is_red():
+            
             return False
+        
         return True
 
-    # Returns the grandparent of this node
-    def get_grandparent(self):
+    def get_grandparent(self): # Returns the grandparent of the current node
+        
         if self.parent is None:
+            
             return None
+        
         return self.parent.parent
 
-    # Gets this node's predecessor from the left child's subtree
-    def get_predecessor(self):
+
+    def get_predecessor(self): # Gets this node's predecessor from the left child's subtree
+        
         node = self.left
+        
         while node.right is not None:
+            
             node = node.right
+            
         return node
 
-    # Returns this node's sibling or none if no sibiling
-    def get_sibling(self):
+
+    def get_sibling(self): # Returns this node's sibling or none if no sibiling
+        
         if self.parent is not None:
+            
             if self is self.parent.left:
+                
                 return self.parent.right
+            
             return self.parent.left
+        
         return None
 
-    # Returns the uncle of current node
-    def get_uncle(self):
+    
+    def get_uncle(self): # Returns the uncle of current node
+        
         grandparent = self.get_grandparent()
+        
         if grandparent is None:
             return None
+        
         if grandparent.left is self.parent:
+            
             return grandparent.right
+        
         return grandparent.left
-    # if node's color is black return true
-    def is_black(self):
+  
+    def is_black(self): # if node's color is black return true
         return self.color == "black"
     
-    # if node's color is red return true
-    def is_red(self):
+
+    def is_red(self): # if node's color is red return true
+        
         return self.color == "red"
 
-    # Replaces node's children with a new child
-    def replace_child(self, current_child, new_child):
+    
+    def replace_child(self, current_child, new_child): # Replaces node's children with a new child
+        
         if self.left is current_child:
+            
             return self.set_child("left", new_child)
+        
         elif self.right is current_child:
+            
             return self.set_child("right", new_child)
+        
         return False
 
-    # Sets the left or right child or current node
-    def set_child(self, which_child, child):
+    
+    def set_child(self, which_child, child): # Sets the left or right child or current node
+        
         if which_child != "left" and which_child != "right":
             return False
 
@@ -87,12 +116,15 @@ class RBTNode:
 
 
 class RedBlackTree:
+    
     def __init__(self):
         self.root = None
 
 
     def rbt_insert(self, key):
-        new_node = RBTNode(key, None, None, None, None)
+        
+        new_node = RBT_Node(key, None, None, None, None)
+        
         self.insert_node(new_node)
 
     def insert_node(self, node):
@@ -100,34 +132,43 @@ class RedBlackTree:
             self.root = node
         else:
             current_node = self.root
+            
             while current_node is not None:
+                
                 if node.key < current_node.key:
+                    
                     if current_node.left is None:
                         current_node.set_child("left", node)
+                        
                         break
+                    
                     else:
                         current_node = current_node.left
                 else:
+                    
                     if current_node.right is None:
                         current_node.set_child("right", node)
+                        
                         break
+                    
                     else:
                         current_node = current_node.right
 
-        # Color the node red
-        node.color = "red"
+       
+        node.color = "red" # Color the node red
 
-        # Balance
-        self.rbt_balance(node)
+       
+        self.rbt_balance(node)  # Balance the tree
 
     def rbt_balance(self, node):
-        # If node is the root returns the node black
-        if node.parent is None:
+        
+       
+        if node.parent is None:  # If node is the root returns the node black
             node.color = "black"
             return
 
-        # If parent is black, then return
-        if node.parent.is_black():
+        
+        if node.parent.is_black(): # If parent is black, then return
             return
 
         parent = node.parent
@@ -153,6 +194,7 @@ class RedBlackTree:
 
         # Color parent black and grandparent red
         parent.color = "black"
+        
         grandparent.color = "red"
 
         # If node is parent's left child, then rotate right at grandparent, otherwise rotate left
@@ -163,35 +205,49 @@ class RedBlackTree:
             self.rotate_left(grandparent)
 
     def rotate_left(self, node):
+        
         right_left_child = node.right.left
+        
         if node.parent != None:
             node.parent.replace_child(node, node.right)
-        # node is root
-        else: 
+            
+       
+        else:  # node is root 
+            
             self.root = node.right
             self.root.parent = None
+            
         node.right.set_child("left", node)
         node.set_child("right", right_left_child)
 
     def rotate_right(self, node):
+        
         left_right_child = node.left.right
+        
         if node.parent != None:
             node.parent.replace_child(node, node.left)
+            
         else:  # node is root
+            
             self.root = node.left
             self.root.parent = None
+            
         node.left.set_child("right", node)
         node.set_child("left", left_right_child)
 
     def search(self, key):
+        
         current_node = self.root
+        
         while current_node is not None:
-           # if the current node and key match return True
-            if current_node.key == key:
+            
+           
+            if current_node.key == key: # if the current node and key match return True
                 return True
 
-            #if the key is less than current node search left
-            elif key < current_node.key:
+            
+            elif key < current_node.key: #if the key is less than current node search left
+                
                 current_node = current_node.left
 
            # if the key is greater than current node search right
