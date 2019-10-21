@@ -12,7 +12,7 @@ Purpose of program: uses reb black tree and avl tree to find anagrams
 from redblacktree import RedBlackTree
 from avl import AVL_Tree, Node
 
-count = 0 # global variable to count the anagrams
+count = -1 # global variable to count the anagrams
 
 def rb_file_reader(file): # this function loads file in to red and black tree 
     
