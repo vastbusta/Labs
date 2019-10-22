@@ -69,12 +69,12 @@ def max_anagram(file, word_file): # checks the max number of anagrams
 
     global count
 
-    usrFile = open(file, "r") #re-opens file to scan every element in the file and compare against data structure
+    usr_file = open(file, "r") #re-opens file to scan every element in the file and compare against data structure
     max_count = 0
     anagram_count = 0
     longest_word = ""
 
-    for line in usrFile:
+    for line in usr_file:
         
         word = line.strip('\n').lower()
         anagram_count= count_anagrams(word, word_file) # each iteration of the file read gives count a new value
@@ -86,9 +86,8 @@ def max_anagram(file, word_file): # checks the max number of anagrams
             
         count = 0 # global variable updated, in order to provide new count value in count_anagrams method return
         
-        anagram_count = 0
         
-    usrFile.close() 
+    usr_file.close() 
     
     print("Word with the most anagrams is: ",longest_word , "\nThe number of anagrams it has is: ", max_count, "\n")
 
